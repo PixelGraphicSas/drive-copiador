@@ -20,15 +20,15 @@
   --shadow-lg:0 8px 40px rgba(0,0,0,0.12);
 }
 :root[data-theme="dark"] {
-  --bg:#060912; --surface:#0A0F1A; --surface2:#0F1620; --surface3:#141D2C;
-  --border:#162540; --border2:#1E3050;
-  --ink:#E8EAF6; --ink2:#8892B0; --ink3:#3A4A60;
+  --bg:#0D1117; --surface:#161B22; --surface2:#161B22; --surface3:#1C2128;
+  --border:#21262D; --border2:#30363D;
+  --ink:#E6EDF3; --ink2:#8B949E; --ink3:#484F58;
   --green:#00E5A0; --green-bg:rgba(0,229,160,0.08); --green-lt:rgba(0,229,160,0.2);
   --red:#FF4D6D; --red-bg:rgba(255,77,109,0.08); --red-lt:rgba(255,77,109,0.18);
   --amber:#FFB800; --amber-bg:rgba(255,184,0,0.08); --amber-lt:rgba(255,184,0,0.2);
   --blue:#4FC3F7; --blue-bg:rgba(79,195,247,0.08);
-  --shadow:0 2px 8px rgba(0,0,0,0.6),0 4px 24px rgba(0,0,0,0.4);
-  --shadow-lg:0 8px 40px rgba(0,0,0,0.8);
+  --shadow:0 1px 3px rgba(0,0,0,0.4),0 4px 16px rgba(0,0,0,0.3);
+  --shadow-lg:0 8px 40px rgba(0,0,0,0.6);
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 html{transition:background .3s;}
@@ -45,6 +45,8 @@ body{font-family:'Space Grotesk',sans-serif;background:var(--bg);color:var(--ink
 .topbar-right{display:flex;align-items:center;gap:9px;}
 .btn-topbar{display:flex;align-items:center;gap:6px;background:var(--surface);border:1px solid var(--border);border-radius:100px;padding:6px 13px;cursor:pointer;font-size:.72rem;font-weight:600;color:var(--ink2);font-family:'Space Grotesk',sans-serif;transition:all .2s;}
 .btn-topbar:hover{border-color:var(--green);color:var(--green);}
+.btn-topbar.logout{border-color:var(--border2);color:var(--ink3);}
+.btn-topbar.logout:hover{border-color:var(--red);color:var(--red);}
 .btn-topbar svg{transition:transform .4s;}
 .btn-topbar.gear:hover svg{transform:rotate(60deg);}
 .toggle-track{width:28px;height:16px;background:var(--border2);border-radius:100px;position:relative;transition:background .3s;}
@@ -450,6 +452,10 @@ tr:hover td{background:var(--surface2);}
         <div class="toggle-track"><div class="toggle-thumb"></div></div>
         <span id="theme-lbl-top">Modo oscuro</span>
       </button>
+      <button class="btn-topbar logout" onclick="doLogout()">
+        <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        Salir
+      </button>
       <button class="btn-topbar gear" onclick="openSettings()">
         <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
         Configuración
@@ -775,7 +781,7 @@ function init(){
 // ── THEME ───────────────────────────────────────────────────────────────────
 function loadTheme(){const s=localStorage.getItem('dc_theme')||'dark';document.documentElement.setAttribute('data-theme',s);}
 function toggleTheme(){const c=document.documentElement.getAttribute('data-theme');const n=c==='light'?'dark':'light';document.documentElement.setAttribute('data-theme',n);localStorage.setItem('dc_theme',n);updateThemeLabels();}
-function updateThemeLabels(){const d=document.documentElement.getAttribute('data-theme')==='dark';const lbl=d?'Encendido':'Apagado';const top=d?'Modo día':'Modo oscuro';const e1=document.getElementById('set-theme-lbl');const e2=document.getElementById('theme-lbl-top');if(e1)e1.textContent=lbl;if(e2)e2.textContent=top;}
+function updateThemeLabels(){const d=document.documentElement.getAttribute('data-theme')==='dark';const lbl=d?'Encendido':'Apagado';const top=d?'Modo oscuro':'Modo día';const e1=document.getElementById('set-theme-lbl');const e2=document.getElementById('theme-lbl-top');if(e1)e1.textContent=lbl;if(e2)e2.textContent=top;}
 
 // ── MODULES ──────────────────────────────────────────────────────────────────
 function loadModules(){const s=localStorage.getItem('dc_modules');modules=s?JSON.parse(s):DEFAULT_MODULES.map(m=>({...m}));}
@@ -798,8 +804,26 @@ function selectModule(id){
   selectedMod=modules.find(m=>m.id===id);
   document.querySelectorAll('.module-btn').forEach(b=>b.classList.remove('selected'));
   document.getElementById('modbtn-'+id).classList.add('selected');
-  // activate panel 1
+  // Reset panel index completamente antes de activar
   setPanelState('index','active');
+  closePanelBody('index');
+  resetProcFlags('idx');
+  hideControls('idx');
+  idxLogCount=0;
+  const idxLog=document.getElementById('idx-log');
+  if(idxLog) idxLog.innerHTML='';
+  const idxLogCnt=document.getElementById('idx-log-count');
+  if(idxLogCnt) idxLogCnt.textContent='0';
+  const idxTiming=document.getElementById('idx-timing');
+  if(idxTiming) idxTiming.style.display='none';
+  const idxCurrent=document.getElementById('idx-current');
+  if(idxCurrent) idxCurrent.innerHTML='<div class="spinner amber"></div><span id="idx-current-txt">Iniciando...</span>';
+  const idxFill=document.getElementById('idx-fill');
+  if(idxFill) idxFill.style.width='0%';
+  const idxPct=document.getElementById('idx-pct');
+  if(idxPct) idxPct.textContent='0%';
+  const idxPhase=document.getElementById('idx-phase');
+  if(idxPhase) idxPhase.textContent='Consultando Drive...';
   document.getElementById('btn-index').disabled=false;
   // update index subtitle
   const c=fileIndexCache[id];
@@ -1467,6 +1491,21 @@ function dlFile(filename,content){
   const a=document.createElement('a');
   a.href=URL.createObjectURL(new Blob(['﻿'+content],{type:'text/csv;charset=utf-8'}));
   a.download=filename;a.click();
+}
+
+function doLogout(){
+  if(!confirm('¿Cerrar sesión?'))return;
+  isAuthed=false;
+  // Revocar token de Google
+  const token=gapi.client.getToken();
+  if(token) google.accounts.oauth2.revoke(token.access_token,()=>{});
+  gapi.client.setToken(null);
+  // Resetear estado
+  resetAll();
+  selectedMod=null;
+  // Ocultar app y mostrar login
+  document.getElementById('main-app').style.display='none';
+  document.getElementById('auth-overlay').style.display='flex';
 }
 
 function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500);}
