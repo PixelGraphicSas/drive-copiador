@@ -234,7 +234,6 @@ tr:hover td{background:var(--surface2);}
 /* ── AUTH OVERLAY ── */
 #auth-overlay{position:fixed;inset:0;background:var(--bg);z-index:200;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;gap:0;}
 #main-app{display:none;}
-#main-app.visible{display:block;}
 .auth-box{background:var(--surface);border:1px solid var(--border);border-top:2px solid var(--green);border-radius:10px;padding:44px 40px;max-width:400px;width:100%;box-shadow:var(--shadow-lg),0 0 40px rgba(0,229,160,0.08);text-align:center;}
 .auth-footer-tag{margin-top:48px;font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--ink3);letter-spacing:.08em;text-transform:uppercase;opacity:.5;}
 .auth-icon{width:56px;height:56px;background:var(--ink);border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;}
@@ -1183,7 +1182,10 @@ function doAuth(){
     try{
       await gapi.client.init({apiKey:CONFIG.apiKey,discoveryDocs:['https://www.googleapis.com/discovery/v1/apis/drive/v3/rest']});
       tokenClient=google.accounts.oauth2.initTokenClient({client_id:CONFIG.clientId,scope:'https://www.googleapis.com/auth/drive',
-        callback:(resp)=>{if(resp.error){alert('Error: '+resp.error);return;}gapi.client.setToken({access_token:resp.access_token});isAuthed=true;document.getElementById('auth-overlay').style.display='none';}
+        callback:(resp)=>{if(resp.error){alert('Error: '+resp.error);return;}gapi.client.setToken({access_token:resp.access_token});
+          isAuthed=true;
+          document.getElementById('auth-overlay').style.display='none';
+          document.getElementById('main-app').style.display='block';}
       });
       tokenClient.requestAccessToken();
     }catch(e){alert('Error: '+e.message);}
