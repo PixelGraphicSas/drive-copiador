@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-theme="light">
+<html lang="es" data-theme="dark">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,15 +9,15 @@
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root[data-theme="light"] {
-  --bg:#0B0F1E; --surface:#111827; --surface2:#1A2235; --surface3:#1E2A3E;
-  --border:#1E3A5F; --border2:#2A4A7A;
-  --ink:#E8EAF6; --ink2:#8892B0; --ink3:#4A5568;
-  --green:#00E5A0; --green-bg:rgba(0,229,160,0.1); --green-lt:rgba(0,229,160,0.25);
-  --red:#FF4D6D; --red-bg:rgba(255,77,109,0.1); --red-lt:rgba(255,77,109,0.2);
-  --amber:#FFB800; --amber-bg:rgba(255,184,0,0.1); --amber-lt:rgba(255,184,0,0.25);
-  --blue:#4FC3F7; --blue-bg:rgba(79,195,247,0.1);
-  --shadow:0 2px 8px rgba(0,0,0,0.4),0 4px 24px rgba(0,0,0,0.3);
-  --shadow-lg:0 8px 40px rgba(0,0,0,0.6);
+  --bg:#F0F2F5; --surface:#FFFFFF; --surface2:#F5F7FA; --surface3:#EBF0F7;
+  --border:#D1D9E6; --border2:#B8C5D6;
+  --ink:#1A2235; --ink2:#4A5568; --ink3:#8892A8;
+  --green:#0A9E71; --green-bg:rgba(10,158,113,0.08); --green-lt:rgba(10,158,113,0.2);
+  --red:#D63651; --red-bg:rgba(214,54,81,0.08); --red-lt:rgba(214,54,81,0.18);
+  --amber:#C47D00; --amber-bg:rgba(196,125,0,0.08); --amber-lt:rgba(196,125,0,0.2);
+  --blue:#1A6DB5; --blue-bg:rgba(26,109,181,0.08);
+  --shadow:0 1px 4px rgba(0,0,0,0.08),0 4px 16px rgba(0,0,0,0.06);
+  --shadow-lg:0 8px 40px rgba(0,0,0,0.12);
 }
 :root[data-theme="dark"] {
   --bg:#060912; --surface:#0A0F1A; --surface2:#0F1620; --surface3:#141D2C;
@@ -185,11 +185,10 @@ textarea::placeholder{color:var(--ink3);}
 .c-green{color:var(--green);text-shadow:0 0 10px rgba(0,229,160,0.4);} .c-red{color:var(--red);} .c-ink{color:var(--ink);}
 
 /* ── LOG ── */
-.log-mini{background:var(--ink);border-radius:9px;overflow:hidden;margin-top:4px;}
-[data-theme="dark"] .log-mini{background:#0A0A10;border:1px solid var(--border);}
-.log-mini-top{padding:7px 13px;border-bottom:1px solid rgba(255,255,255,.06);display:flex;align-items:center;justify-content:space-between;}
+.log-mini{background:#0A0F1A;border:1px solid #1E3A5F;border-radius:9px;overflow:hidden;margin-top:4px;}
+.log-mini-top{padding:7px 13px;border-bottom:1px solid rgba(255,255,255,.06);background:#060912;display:flex;align-items:center;justify-content:space-between;}
 .log-mini-lbl{font-family:'JetBrains Mono',monospace;font-size:.58rem;color:rgba(255,255,255,.3);letter-spacing:.1em;text-transform:uppercase;}
-.log-mini-body{padding:9px 13px;height:110px;overflow-y:auto;font-family:'JetBrains Mono',monospace;font-size:.67rem;line-height:1.85;}
+.log-mini-body{padding:9px 13px;height:110px;overflow-y:auto;font-family:'JetBrains Mono',monospace;font-size:.67rem;line-height:1.85;background:#0A0F1A;}
 .log-mini-body::-webkit-scrollbar{width:3px;}
 .log-mini-body::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:2px;}
 .log-ok{color:#6EE7B7;} .log-err{color:#FCA5A5;} .log-info{color:rgba(255,255,255,.35);} .log-warn{color:#FCD34D;}
@@ -774,7 +773,7 @@ function init(){
 }
 
 // ── THEME ───────────────────────────────────────────────────────────────────
-function loadTheme(){const s=localStorage.getItem('dc_theme')||'light';document.documentElement.setAttribute('data-theme',s);}
+function loadTheme(){const s=localStorage.getItem('dc_theme')||'dark';document.documentElement.setAttribute('data-theme',s);}
 function toggleTheme(){const c=document.documentElement.getAttribute('data-theme');const n=c==='light'?'dark':'light';document.documentElement.setAttribute('data-theme',n);localStorage.setItem('dc_theme',n);updateThemeLabels();}
 function updateThemeLabels(){const d=document.documentElement.getAttribute('data-theme')==='dark';const lbl=d?'Encendido':'Apagado';const top=d?'Modo día':'Modo oscuro';const e1=document.getElementById('set-theme-lbl');const e2=document.getElementById('theme-lbl-top');if(e1)e1.textContent=lbl;if(e2)e2.textContent=top;}
 
