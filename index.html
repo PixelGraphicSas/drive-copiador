@@ -889,9 +889,13 @@ async function runIndex(){
       if(pageToken)params.pageToken=pageToken;
       const resp=await gapi.client.drive.files.list(params);
       for(const f of(resp.result.files||[])){
-        const key=f.name.toLowerCase().replace(/\.[^.]+$/,'');
-        index[key]={id:f.id,name:f.name};
-        index[f.name.toLowerCase()]={id:f.id,name:f.name};
+        // Indexar por nombre completo en minúsculas (con extensión)
+        const nameLower=f.name.toLowerCase();
+        const nameNoExt=nameLower.replace(/\.[^.]+$/,'');
+        const entry={id:f.id,name:f.name};
+        index[nameLower]=entry;
+        // Solo indexar sin extensión si difiere del nombre completo
+        if(nameNoExt!==nameLower) index[nameNoExt]=entry;
       }
       pageToken=resp.result.nextPageToken;
     }while(pageToken && !procFlags.idx.cancelled);
@@ -981,28 +985,44 @@ async function runSearch(){
   srchLog('info',`▶ Inicio: ${fmtTime(srchStart)}`);
   srchLog('info',`Buscando ${variants.length} variantes en ${Object.keys(index).length/2|0} archivos indexados`);
 
+  // Búsqueda en memoria — sin delays, UI batch cada 50 iteraciones
+  const UI_BATCH=50;
   for(let i=0;i<variants.length;i++){
-    await waitIfPaused('srch');
-    if(procFlags.srch.cancelled) break;
-    const v=variants[i];
-    const pct=Math.round(((i+1)/variants.length)*100);
-    document.getElementById('srch-pct').textContent=pct+'%';
-    document.getElementById('srch-fill').style.width=pct+'%';
-    document.getElementById('srch-phase').textContent=`Variante ${i+1} de ${variants.length}`;
-    document.getElementById('srch-current-txt').textContent=`Buscando: ${v}`;
-    document.getElementById('srch-s-total').textContent=i+1;
+    // Pausa/cancelar solo chequear ocasionalmente para no bloquear
+    if(i%UI_BATCH===0){
+      await waitIfPaused('srch');
+      if(procFlags.srch.cancelled) break;
+      // Actualizar UI en batch
+      const pct=Math.round(((i+1)/variants.length)*100);
+      document.getElementById('srch-pct').textContent=pct+'%';
+      document.getElementById('srch-fill').style.width=pct+'%';
+      document.getElementById('srch-phase').textContent=`Variante ${i+1} de ${variants.length}`;
+      document.getElementById('srch-current-txt').textContent=`Buscando: ${variants[i]}`;
+      document.getElementById('srch-s-total').textContent=i+1;
+      document.getElementById('srch-s-found').textContent=searchResults.found.length;
+      document.getElementById('srch-s-miss').textContent=i-searchResults.found.length;
+      // Yield al browser para mantener UI responsiva
+      await new Promise(r=>setTimeout(r,0));
+    }
 
+    const v=variants[i];
     const match=findInIndex(index,v);
     if(match){
       searchResults.found.push({variant:v,baseCode:extractBase(v),name:match.name,id:match.id});
-      srchLog('ok',`✓ ${v} → ${match.name}`);
+      // Log solo los primeros 200 para no saturar el DOM del log
+      if(searchResults.found.length<=200) srchLog('ok',`✓ ${v} → ${match.name}`);
+      else if(searchResults.found.length===201) srchLog('info','... (log resumido por volumen)');
     }else{
       searchResults.missing.push({variant:v,baseCode:extractBase(v)});
     }
-    document.getElementById('srch-s-found').textContent=searchResults.found.length;
-    document.getElementById('srch-s-miss').textContent=i+1-searchResults.found.length;
-    await sleep(30);
   }
+  // Actualización final de UI
+  const finalPct=procFlags.srch.cancelled?Math.round((variants.indexOf(variants[variants.length-1])/variants.length)*100):100;
+  document.getElementById('srch-pct').textContent=finalPct+'%';
+  document.getElementById('srch-fill').style.width=finalPct+'%';
+  document.getElementById('srch-s-total').textContent=variants.length;
+  document.getElementById('srch-s-found').textContent=searchResults.found.length;
+  document.getElementById('srch-s-miss').textContent=searchResults.missing.length;
 
   // Final state
   document.getElementById('srch-current').innerHTML=`<svg width="12" height="12" fill="none" stroke="var(--green)" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span style="color:var(--green)">✓ Búsqueda completada: ${searchResults.found.length} encontrados</span>`;
@@ -1074,43 +1094,56 @@ async function runCopy(){
   copyLog('info',`Copiando ${files.length} archivos → ${destLabel}`);
 
   let consecutiveErrors=0;
+  const BATCH_SIZE=destMode==='local'?1:3; // 3 copias paralelas en Drive, 1 en local
 
-  for(let i=0;i<files.length;i++){
+  for(let i=0;i<files.length;i+=BATCH_SIZE){
     await waitIfPaused('copy');
     if(procFlags.copy.cancelled) break;
-    const f=files[i];
-    const pct=Math.round(((i+1)/files.length)*100);
+
+    // Tomar lote de hasta BATCH_SIZE archivos
+    const batch=files.slice(i,Math.min(i+BATCH_SIZE,files.length));
+    const batchIdx=i;
+
+    // Actualizar UI con el primer archivo del lote
+    const f=batch[0];
+    const pct=Math.round(((i+batch.length)/files.length)*100);
     document.getElementById('copy-pct').textContent=pct+'%';
     document.getElementById('copy-fill').style.width=pct+'%';
-    document.getElementById('copy-phase').textContent=`Copiando ${i+1} de ${files.length}`;
-    document.getElementById('copy-current-txt').textContent=`Copiando: ${f.name}`;
-    document.getElementById('copy-s-total').textContent=i+1;
-    try{
-      if(destMode==='local'){
-        await copyFileLocal(f.id,f.name);
-      }else{
-        await copyFile(f.id,selectedMod.dest,f.name);
-      }
-      copyResults.ok.push(f);
-      copyLog('ok',`✓ ${f.name}`);
-      consecutiveErrors=0;
-    }catch(e){
-      const errMsg=e.message||String(e);
-      const isRateLimit=(errMsg.includes('429')||errMsg.includes('userRateLimitExceeded')||errMsg.includes('rateLimitExceeded')||errMsg.includes('Rate Limit'));
-      const isPermission=(errMsg.includes('403')||errMsg.includes('forbidden')||errMsg.includes('permission')||errMsg.includes('Permission')||errMsg.includes('insufficientFilePermissions'));
-      if(isPermission){
-        // Error de permisos: registrar pero NO contar para la pausa automática
-        copyResults.errors.push({...f,error:'Sin permisos suficientes para copiar'});
-        copyLog('warn',`⚠ ${f.name}: Sin permisos — archivo omitido`);
-        // No incrementar consecutiveErrors para no disparar pausa innecesaria
-      } else {
-        consecutiveErrors++;
-        copyResults.errors.push({...f,error:errMsg});
-        copyLog('err',`✗ ${f.name}: ${errMsg}`);
-        copyLog('warn',`Errores consecutivos: ${consecutiveErrors}`);
-      }
+    document.getElementById('copy-phase').textContent=`Copiando ${i+1}–${i+batch.length} de ${files.length}`;
+    document.getElementById('copy-current-txt').textContent=batch.length>1?`Copiando lote: ${batch.map(x=>x.variant).join(', ')}`:`Copiando: ${f.name}`;
+    document.getElementById('copy-s-total').textContent=i+batch.length;
 
-      if(isRateLimit && consecutiveErrors>=ERRORS_BEFORE_PAUSE){
+    // Ejecutar lote en paralelo
+    const results=await Promise.allSettled(batch.map(bf=>
+      destMode==='local'?copyFileLocal(bf.id,bf.name):copyFile(bf.id,selectedMod.dest,bf.name)
+    ));
+
+    // Procesar resultados del lote
+    results.forEach((result,bi)=>{
+      const bf=batch[bi];
+      if(result.status==='fulfilled'){
+        copyResults.ok.push(bf);
+        copyLog('ok',`✓ ${bf.name}`);
+        consecutiveErrors=0;
+      } else {
+        const e=result.reason;
+        const errMsg=e?.message||String(e);
+        const isRateLimit=(errMsg.includes('429')||errMsg.includes('userRateLimitExceeded')||errMsg.includes('rateLimitExceeded')||errMsg.includes('Rate Limit'));
+        const isPermission=(errMsg.includes('403')||errMsg.includes('forbidden')||errMsg.includes('permission')||errMsg.includes('Permission')||errMsg.includes('insufficientFilePermissions'));
+        if(isPermission){
+          copyResults.errors.push({...bf,error:'Sin permisos suficientes para copiar'});
+          copyLog('warn',`⚠ ${bf.name}: Sin permisos — omitido`);
+        } else {
+          consecutiveErrors++;
+          copyResults.errors.push({...bf,error:errMsg});
+          copyLog('err',`✗ ${bf.name}: ${errMsg}`);
+        }
+      }
+    });
+    document.getElementById('copy-s-ok').textContent=copyResults.ok.length;
+    document.getElementById('copy-s-err').textContent=copyResults.errors.length;
+
+    if(consecutiveErrors>=ERRORS_BEFORE_PAUSE){
         // ── PAUSA AUTOMÁTICA — solo por rate limit ──
         copyLog('warn',`⏸ Pausando ${PAUSE_SECONDS/60} min por límite de Drive...`);
         document.getElementById('copy-phase').textContent='⏸ Pausa por límite de Drive...';
@@ -1129,22 +1162,12 @@ async function runCopy(){
         copyLog('ok',`▶ Reanudando desde archivo ${i+1}...`);
         document.getElementById('copy-phase').textContent=`Reanudando: ${i+1} de ${files.length}`;
 
-        // Reintentar el mismo archivo después de la pausa
-        try{
-          if(destMode==='local'){await copyFileLocal(f.id,f.name);}
-          else{await copyFile(f.id,selectedMod.dest,f.name);}
-          // remove from errors, add to ok
-          copyResults.errors=copyResults.errors.filter(x=>x.id!==f.id);
-          copyResults.ok.push(f);
-          copyLog('ok',`✓ Reintento exitoso: ${f.name}`);
-        }catch(e2){
-          copyLog('err',`✗ Reintento fallido: ${f.name}`);
-        }
+        // El loop de lotes continuará desde el siguiente lote automáticamente
       }
-    }
     document.getElementById('copy-s-ok').textContent=copyResults.ok.length;
     document.getElementById('copy-s-err').textContent=copyResults.errors.length;
-    await sleep(80);
+    // pequeño yield entre lotes
+    await new Promise(r=>setTimeout(r,15));
   }
 
   const copyEnd=Date.now();
@@ -1214,7 +1237,15 @@ function resetCopyPanel(){
 }
 
 // ── DRIVE API ─────────────────────────────────────────────────────────────────
-function findInIndex(index,code){const l=code.toLowerCase();if(index[l])return index[l];for(const k of Object.keys(index)){if(k===l||k.startsWith(l+'.')){return index[k];}}return null;}
+function findInIndex(index,code){
+  const l=code.toLowerCase();
+  // O(1): búsqueda directa por nombre exacto o nombre sin extensión
+  if(index[l]) return index[l];
+  // O(1): las extensiones más comunes primero
+  const exts=['.jpg','.jpeg','.png','.pdf','.tif','.tiff','.gif','.webp','.bmp','.psd','.ai','.svg','.eps','.mp4','.mov','.zip','.rar'];
+  for(const ext of exts){if(index[l+ext]) return index[l+ext];}
+  return null;
+}
 async function copyFile(fileId,destId,name){
   // Intento 1: files.copy() — rápido, requiere permisos de editor en el archivo
   try{
