@@ -1245,27 +1245,14 @@ async function copyFile(fileId,destId,name){
     {headers:{Authorization:`Bearer ${token}`}}
   );
   const meta=metaResp.ok?await metaResp.json():{mimeType:'application/octet-stream'};
-  // Subir a carpeta destino
-  const boundary='-------DriveCopiador'+Date.now();
+  // Subir a carpeta destino usando FormData multipart
   const metadata=JSON.stringify({name,parents:[destId]});
-  const body=[
-    `--${boundary}`,
-    'Content-Type: application/json; charset=UTF-8',
-    '',
-    metadata,
-    `--${boundary}`,
-    `Content-Type: ${meta.mimeType}`,
-    '',
-    ''
-  ].join('
-');
-  // Usar FormData para construir multipart
   const form=new FormData();
   form.append('metadata',new Blob([metadata],{type:'application/json'}));
-  form.append('file',blob);
+  form.append('file',new Blob([blob],{type:meta.mimeType}));
   const upResp=await fetch(
     'https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&supportsAllDrives=true',
-    {method:'POST',headers:{Authorization:`Bearer ${token}`},body:form}
+    {method:'POST',headers:{Authorization:'Bearer '+token},body:form}
   );
   if(!upResp.ok){
     const errBody=await upResp.json().catch(()=>({}));
