@@ -885,7 +885,7 @@ async function runIndex(){
       const fakePct=Math.min(92,pageCount*18);
       setIdxPct(fakePct,`Descargando página ${pageCount}...`);
       document.getElementById('idx-current-txt').textContent=`Página ${pageCount} del índice...`;
-      const params={q:`'${selectedMod.origin}' in parents and trashed=false`,fields:'nextPageToken, files(id, name)',pageSize:1000};
+      const params={q:`'${selectedMod.origin}' in parents and trashed=false`,fields:'nextPageToken, files(id, name)',pageSize:1000,supportsAllDrives:true,includeItemsFromAllDrives:true};
       if(pageToken)params.pageToken=pageToken;
       const resp=await gapi.client.drive.files.list(params);
       for(const f of(resp.result.files||[])){
@@ -1095,13 +1095,23 @@ async function runCopy(){
       copyLog('ok',`✓ ${f.name}`);
       consecutiveErrors=0;
     }catch(e){
-      consecutiveErrors++;
-      copyResults.errors.push({...f,error:e.message});
-      copyLog('err',`✗ ${f.name}: ${e.message}`);
-      copyLog('warn',`Errores consecutivos: ${consecutiveErrors}`);
+      const errMsg=e.message||String(e);
+      const isRateLimit=(errMsg.includes('429')||errMsg.includes('userRateLimitExceeded')||errMsg.includes('rateLimitExceeded')||errMsg.includes('Rate Limit'));
+      const isPermission=(errMsg.includes('403')||errMsg.includes('forbidden')||errMsg.includes('permission')||errMsg.includes('Permission')||errMsg.includes('insufficientFilePermissions'));
+      if(isPermission){
+        // Error de permisos: registrar pero NO contar para la pausa automática
+        copyResults.errors.push({...f,error:'Sin permisos suficientes para copiar'});
+        copyLog('warn',`⚠ ${f.name}: Sin permisos — archivo omitido`);
+        // No incrementar consecutiveErrors para no disparar pausa innecesaria
+      } else {
+        consecutiveErrors++;
+        copyResults.errors.push({...f,error:errMsg});
+        copyLog('err',`✗ ${f.name}: ${errMsg}`);
+        copyLog('warn',`Errores consecutivos: ${consecutiveErrors}`);
+      }
 
-      if(consecutiveErrors>=ERRORS_BEFORE_PAUSE){
-        // ── PAUSA AUTOMÁTICA ──
+      if(isRateLimit && consecutiveErrors>=ERRORS_BEFORE_PAUSE){
+        // ── PAUSA AUTOMÁTICA — solo por rate limit ──
         copyLog('warn',`⏸ Pausando ${PAUSE_SECONDS/60} min por límite de Drive...`);
         document.getElementById('copy-phase').textContent='⏸ Pausa por límite de Drive...';
         document.getElementById('copy-current-txt').textContent='Esperando para reanudar...';
@@ -1144,6 +1154,13 @@ async function runCopy(){
   document.getElementById('copy-current').innerHTML=`<svg width="12" height="12" fill="none" stroke="var(--green)" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span style="color:var(--green)">✓ Copia completada: ${copyResults.ok.length} archivos copiados</span>`;
   copyLog('ok',`Copia completa: ${copyResults.ok.length} ok, ${copyResults.errors.length} errores`);
   copyLog('ok',`⏱ Duración total: ${fmtDuration(copyEnd-copyStart)} (${fmtTime(copyStart)} → ${fmtTime(copyEnd)})`);
+  // Si hay muchos errores, orientar al usuario
+  const permErrors=copyResults.errors.filter(e=>e.error&&(e.error.includes('permisos')||e.error.includes('403')||e.error.includes('Error subiendo')));
+  if(permErrors.length>0&&copyResults.ok.length===0){
+    copyLog('warn','⚠ Todos los archivos fallaron. Verifica que tu cuenta tenga acceso a la carpeta destino como Editor.');
+  } else if(permErrors.length>0){
+    copyLog('warn',`⚠ ${permErrors.length} archivos omitidos por permisos insuficientes.`);
+  }
   setPanelState('copy','done');
   hideControls('copy');
   document.getElementById('copy-dl-row').classList.add('visible');
@@ -1198,7 +1215,63 @@ function resetCopyPanel(){
 
 // ── DRIVE API ─────────────────────────────────────────────────────────────────
 function findInIndex(index,code){const l=code.toLowerCase();if(index[l])return index[l];for(const k of Object.keys(index)){if(k===l||k.startsWith(l+'.')){return index[k];}}return null;}
-async function copyFile(fileId,destId,name){await gapi.client.drive.files.copy({fileId,resource:{parents:[destId],name}});}
+async function copyFile(fileId,destId,name){
+  // Intento 1: files.copy() — rápido, requiere permisos de editor en el archivo
+  try{
+    await gapi.client.drive.files.copy({fileId,resource:{parents:[destId],name}});
+    return; // éxito
+  }catch(e1){
+    const status=e1?.result?.error?.code||e1?.status||0;
+    const isPermError=(status===403||status===401||
+      (e1.message&&(e1.message.includes('403')||e1.message.includes('forbidden')||
+       e1.message.includes('permission')||e1.message.includes('Permission')||
+       e1.message.includes('cannotCopyFile')||e1.message.includes('insufficientFilePermissions'))));
+    if(!isPermError) throw e1; // si no es permisos, lanzar el error original
+    // Es error de permisos → Intento 2: descargar + re-subir
+    // Esto funciona con permisos de solo lectura sobre el archivo
+  }
+  // Intento 2: fetch (Bearer token) + upload multipart
+  const token=gapi.client.getToken().access_token;
+  // Descargar el archivo
+  const dlResp=await fetch(
+    `https://www.googleapis.com/drive/v3/files/${fileId}?alt=media&supportsAllDrives=true`,
+    {headers:{Authorization:`Bearer ${token}`}}
+  );
+  if(!dlResp.ok) throw new Error(`Error descargando archivo: ${dlResp.status}`);
+  const blob=await dlResp.blob();
+  // Obtener metadata para preservar mimeType
+  const metaResp=await fetch(
+    `https://www.googleapis.com/drive/v3/files/${fileId}?fields=mimeType&supportsAllDrives=true`,
+    {headers:{Authorization:`Bearer ${token}`}}
+  );
+  const meta=metaResp.ok?await metaResp.json():{mimeType:'application/octet-stream'};
+  // Subir a carpeta destino
+  const boundary='-------DriveCopiador'+Date.now();
+  const metadata=JSON.stringify({name,parents:[destId]});
+  const body=[
+    `--${boundary}`,
+    'Content-Type: application/json; charset=UTF-8',
+    '',
+    metadata,
+    `--${boundary}`,
+    `Content-Type: ${meta.mimeType}`,
+    '',
+    ''
+  ].join('
+');
+  // Usar FormData para construir multipart
+  const form=new FormData();
+  form.append('metadata',new Blob([metadata],{type:'application/json'}));
+  form.append('file',blob);
+  const upResp=await fetch(
+    'https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&supportsAllDrives=true',
+    {method:'POST',headers:{Authorization:`Bearer ${token}`},body:form}
+  );
+  if(!upResp.ok){
+    const errBody=await upResp.json().catch(()=>({}));
+    throw new Error(`Error subiendo archivo: ${upResp.status} — ${errBody?.error?.message||''}`);
+  }
+}
 
 // ── AUTH ──────────────────────────────────────────────────────────────────────
 function doAuth(){
