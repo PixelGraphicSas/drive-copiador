@@ -1154,7 +1154,7 @@ async function runSearch(){
     const v=variants[i];
     const match=findInIndex(index,v);
     if(match){
-      searchResults.found.push({variant:v,baseCode:extractBase(v),name:match.name,id:match.id});
+      searchResults.found.push({variant:v,baseCode:extractBase(v),name:match.name,id:match.id,handle:match.handle||null,dirHandle:match.dirHandle||null});
       // Log solo los primeros 200 para no saturar el DOM del log
       if(searchResults.found.length<=200) srchLog('ok',`✓ ${v} → ${match.name}`);
       else if(searchResults.found.length===201) srchLog('info','... (log resumido por volumen)');
