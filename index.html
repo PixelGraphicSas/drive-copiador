@@ -810,6 +810,7 @@ let localFolderHandle=null;
 let otrosOriginHandle=null;   // carpeta origen local seleccionada
 let otrosDestHandle=null;     // carpeta destino local seleccionada
 const OTROS_ID=9999;          // ID fijo para el módulo OTROS
+let localFileIndex={};        // índice local en memoria (NO se serializa a localStorage)
 
 // ── INIT ────────────────────────────────────────────────────────────────────
 function init(){
@@ -839,13 +840,12 @@ function renderModules(){
       // ── MÓDULO OTROS (local) ──
       const originName=otrosOriginHandle?otrosOriginHandle.name:'Sin seleccionar';
       const destName=otrosDestHandle?otrosDestHandle.name:'Sin seleccionar';
-      const originOk=!!otrosOriginHandle;
-      const destOk=!!otrosDestHandle;
+      const localCount=Object.keys(localFileIndex).length>0?Math.floor(Object.keys(localFileIndex).length/2):0;
       return`<button class="module-btn otros" id="modbtn-${m.id}" onclick="selectModule(${m.id})">
         <div class="check-badge"><svg width="8" height="8" fill="none" stroke="white" stroke-width="3" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
         <div class="module-logo-ph" style="font-size:1.8rem;">📂</div>
         <div class="module-name">${m.name}</div>
-        <span class="mod-cache-tag local">LOCAL</span>
+        ${localCount>0?`<span class="mod-cache-tag ok">${localCount} arch · Local</span>`:'<span class="mod-cache-tag local">LOCAL</span>'}
       </button>`;
     }
     // ── MÓDULOS DRIVE normales ──
@@ -1038,7 +1038,10 @@ async function runIndexLocal(idxStart){
     await indexLocalFolder(otrosOriginHandle,index,'');
 
     fileCount=Math.floor(Object.keys(index).length/2);
-    fileIndexCache[selectedMod.id]={files:index,ts:Date.now(),count:fileCount,isLocal:true};
+    // Guardar handles en memoria (no serializable a localStorage)
+    localFileIndex=index;
+    // En fileIndexCache solo guardar metadatos sin handles (para no romper JSON.stringify)
+    fileIndexCache[selectedMod.id]={ts:Date.now(),count:fileCount,isLocal:true};
     saveCache();
     setIdxPct(100,'Índice local completado');
     document.getElementById('idx-current').innerHTML=
@@ -1080,7 +1083,9 @@ function idxLog(type,msg){
 
 // ── PROCESO 2: BUSCAR ────────────────────────────────────────────────────────
 function checkSearchReady(){
-  const hasIndex=fileIndexCache[selectedMod?.id]?.files;
+  const hasIndex=selectedMod?.isLocal
+    ? Object.keys(localFileIndex).length>0
+    : fileIndexCache[selectedMod?.id]?.files;
   const hasCodes=parseCodes().length>0;
   const authOk=selectedMod?.isLocal?true:isAuthed;
   document.getElementById('btn-search').disabled=!(hasIndex&&hasCodes&&authOk);
@@ -1102,8 +1107,9 @@ async function runSearch(){
   if(!selectedMod||!isAuthed)return;
   const codes=parseCodes();
   const variants=buildVariants(codes);
-  const index=fileIndexCache[selectedMod.id]?.files;
-  if(!index){showToast('⚠ Primero indexa la carpeta');return;}
+  // Para OTROS local, usar el índice en memoria (handles no son serializables)
+  const index=selectedMod.isLocal ? localFileIndex : fileIndexCache[selectedMod.id]?.files;
+  if(!index||Object.keys(index).length===0){showToast('⚠ Primero indexa la carpeta');return;}
 
   document.getElementById('btn-search').disabled=true;
   setPanelState('search','running');
@@ -1763,6 +1769,7 @@ function resetAll(){
   document.getElementById('otros-setup').classList.remove('visible');
   document.getElementById('dest-switch-wrap').style.display='block';
   destMode='drive'; localFolderHandle=null; setDestMode('drive');
+  localFileIndex={};
   renderModules();
 }
 
