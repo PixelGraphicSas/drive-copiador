@@ -861,7 +861,7 @@ function selectModule(id){
   selectedMod=modules.find(m=>m.id===id);
   document.querySelectorAll('.module-btn').forEach(b=>b.classList.remove('selected'));
   document.getElementById('modbtn-'+id).classList.add('selected');
-  // Reset panel index completamente antes de activar
+  // Reset panel index completamente
   setPanelState('index','active');
   closePanelBody('index');
   resetProcFlags('idx');
@@ -880,18 +880,48 @@ function selectModule(id){
   const idxPct=document.getElementById('idx-pct');
   if(idxPct) idxPct.textContent='0%';
   const idxPhase=document.getElementById('idx-phase');
-  if(idxPhase) idxPhase.textContent='Consultando Drive...';
-  document.getElementById('btn-index').disabled=false;
-  // update index subtitle
-  const c=fileIndexCache[id];
-  document.getElementById('index-sub').textContent=c?`Último índice: ${c.count} archivos · ${cacheAge(c.ts)}`:`Sin índice — haz clic en Indexar`;
-  document.getElementById('copy-sum-dest').textContent=truncId(selectedMod.dest);
-  document.getElementById('dest-drive-id').textContent=selectedMod.dest;
-  // Reset dest mode to drive on module change
-  destMode='drive'; localFolderHandle=null;
-  setDestMode('drive');
-  document.getElementById('dest-local-path').textContent=selectedMod.destLocal||'Sin carpeta seleccionada';
-  // reset subsequent panels
+  if(idxPhase) idxPhase.textContent='';
+
+  // ── BIFURCACIÓN: OTROS (local) vs Drive ──
+  const otrosSetup=document.getElementById('otros-setup');
+  const destSwitchWrap=document.getElementById('dest-switch-wrap');
+  const btnIndex=document.getElementById('btn-index');
+
+  if(selectedMod.isLocal){
+    // ── MODO OTROS LOCAL ──
+    otrosSetup.classList.add('visible');
+    destSwitchWrap.style.display='none';
+    document.getElementById('index-sub').textContent='Selecciona carpeta origen y haz clic en Indexar';
+    btnIndex.innerHTML='<svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg> Indexar Local';
+    // Deshabilitar indexar hasta que elija carpeta origen
+    btnIndex.disabled=!otrosOriginHandle;
+    document.getElementById('copy-sum-dest').textContent=otrosDestHandle?otrosDestHandle.name:'Sin seleccionar';
+    destMode='local';
+    // Restaurar nombres de carpetas si ya fueron elegidas antes
+    if(otrosOriginHandle){
+      document.getElementById('otros-origin-name').textContent=otrosOriginHandle.name;
+      document.getElementById('btn-otros-origin').classList.add('selected');
+    }
+    if(otrosDestHandle){
+      document.getElementById('otros-dest-name').textContent=otrosDestHandle.name;
+      document.getElementById('btn-otros-dest').classList.add('selected');
+    }
+  } else {
+    // ── MODO DRIVE ──
+    otrosSetup.classList.remove('visible');
+    destSwitchWrap.style.display='block';
+    btnIndex.innerHTML='<svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-5.1"/></svg> Indexar';
+    btnIndex.disabled=false;
+    const ch=fileIndexCache[id];
+    document.getElementById('index-sub').textContent=ch?`Último índice: ${ch.count} archivos · ${cacheAge(ch.ts)}`:`Sin índice — haz clic en Indexar`;
+    document.getElementById('copy-sum-dest').textContent=truncId(selectedMod.dest);
+    document.getElementById('dest-drive-id').textContent=selectedMod.dest;
+    destMode='drive';
+    localFolderHandle=null;
+    setDestMode('drive');
+    document.getElementById('dest-local-path').textContent=selectedMod.destLocal||'Sin carpeta seleccionada';
+  }
+
   resetSearchPanel();
   resetCopyPanel();
   document.getElementById('report-wrap').style.display='none';
