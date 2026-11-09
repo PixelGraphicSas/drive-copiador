@@ -362,6 +362,68 @@ tr:hover td{background:var(--surface2);}
 
 @keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 .process-panel,.report-card{animation:fadeUp .3s ease both;}
+
+/* ── PROCESO 4: PDF ── */
+.pdf-drop{border:1.5px dashed var(--border2);border-radius:10px;padding:16px;text-align:center;background:var(--surface2);cursor:pointer;margin-bottom:10px;transition:.15s;}
+.pdf-drop:hover,.pdf-drop.over{border-color:var(--green);background:var(--green-bg);}
+.pdf-drop-t{font-size:.78rem;font-weight:600;color:var(--ink);}
+.pdf-drop-s{font-size:.66rem;color:var(--ink3);margin-top:3px;}
+.pdf-files{font-family:'JetBrains Mono',monospace;font-size:.66rem;color:var(--ink2);margin-bottom:10px;max-height:80px;overflow-y:auto;}
+.pdf-opt{display:flex;align-items:center;gap:8px;margin-bottom:10px;font-size:.68rem;color:var(--ink2);flex-wrap:wrap;}
+.pdf-opt input[type=text]{flex:1;min-width:160px;background:var(--surface2);border:1px solid var(--border2);border-radius:6px;padding:5px 8px;font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--ink);}
+.pdf-warn{font-size:.66rem;color:var(--amber);margin-bottom:8px;display:none;}
+.pdf-res{display:none;margin-top:10px;}
+.pdf-res .table-scroll{max-height:320px;border:1px solid var(--border);border-radius:8px;}
+.pdf-res td,.pdf-res th{padding:7px 12px;}
+.st-ok{color:var(--green);font-weight:600;} .st-no{color:var(--red);font-weight:600;} .st-err{color:var(--amber);font-weight:600;}
+.test-mode #panel-index,.test-mode #panel-search,.test-mode #panel-copy,.test-mode .mod-section,.test-mode #otros-setup,.test-mode #report-wrap,.test-mode .btn-topbar.gear{display:none !important;}
+/* ── PESTAÑAS + FLUJO DE VERIFICACIÓN ── */
+.tabs{display:flex;gap:6px;margin:0 0 16px;border-bottom:1px solid var(--border);}
+.tab{flex:1;min-width:0;background:transparent;border:none;border-bottom:3px solid transparent;padding:12px 14px 11px;cursor:pointer;text-align:left;font-family:'Space Grotesk',sans-serif;color:var(--ink3);transition:.15s;}
+.tab:hover{color:var(--ink);background:var(--surface2);}
+.tab.active{color:var(--green);border-bottom-color:var(--green);background:var(--green-bg);}
+.tab-t{display:block;font-size:.86rem;font-weight:700;}
+.tab-s{display:block;font-size:.64rem;font-weight:400;opacity:.8;margin-top:2px;}
+.view-pdf #panel-index,.view-pdf #panel-search,.view-pdf #panel-copy,.view-pdf .mod-section,.view-pdf #otros-setup,.view-pdf #report-wrap{display:none !important;}
+body:not(.view-pdf) #panel-pdf{display:none !important;}
+.test-mode .tabs{display:none;}
+.stp{margin-bottom:18px;}
+.stp-h{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.stp-n{width:26px;height:26px;border-radius:50%;border:1.5px solid var(--border2);display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:700;color:var(--ink3);flex-shrink:0;}
+.stp-n.done{background:var(--green);border-color:var(--green);color:#04130D;}
+.stp-t{font-size:.86rem;font-weight:700;color:var(--ink);}
+.stp-s{font-size:.66rem;color:var(--ink3);margin-top:1px;}
+.src-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:10px;}
+.src-card{display:flex;gap:11px;align-items:flex-start;background:var(--surface2);border:1.5px solid var(--border2);border-radius:12px;padding:13px 14px;cursor:pointer;transition:.15s;}
+.src-card:hover{border-color:var(--ink3);}
+.src-card.selected{border-color:var(--green);background:var(--green-bg);box-shadow:0 0 0 1px var(--green) inset;}
+.src-card.disabled{opacity:.42;cursor:not-allowed;}
+.src-radio{width:16px;height:16px;border-radius:50%;border:2px solid var(--border2);flex-shrink:0;margin-top:2px;position:relative;}
+.src-card.selected .src-radio{border-color:var(--green);}
+.src-card.selected .src-radio::after{content:'';position:absolute;inset:3px;border-radius:50%;background:var(--green);}
+.src-body{display:flex;flex-direction:column;gap:3px;min-width:0;flex:1;}
+.src-t{font-size:.8rem;font-weight:700;color:var(--ink);}
+.src-d{font-size:.68rem;color:var(--ink2);line-height:1.35;}
+.src-i{font-family:'JetBrains Mono',monospace;font-size:.64rem;color:var(--ink3);word-break:break-all;}
+.src-card.selected .src-i{color:var(--green);}
+.src-extra{margin-top:8px;display:none;}
+.src-extra input[type=text]{width:100%;box-sizing:border-box;background:var(--surface);border:1px solid var(--border2);border-radius:6px;padding:6px 8px;font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--ink);}
+.src-extra .pdf-paste{margin-bottom:0;background:var(--surface);}
+.adv{margin-bottom:18px;border:1px solid var(--border);border-radius:10px;padding:0 12px;}
+.adv summary{cursor:pointer;padding:9px 0;font-size:.72rem;color:var(--ink2);}
+.adv[open] summary{border-bottom:1px solid var(--border);margin-bottom:10px;}
+.btn-verify{width:100%;padding:14px;border-radius:12px;border:none;background:var(--green);color:#04130D;font-family:'Space Grotesk',sans-serif;font-size:.95rem;font-weight:700;cursor:pointer;transition:.15s;}
+.btn-verify:hover:not(:disabled){filter:brightness(1.08);}
+.btn-verify:disabled{background:var(--surface2);color:var(--ink3);cursor:not-allowed;border:1px dashed var(--border2);}
+.verify-hint{text-align:center;font-size:.68rem;color:var(--ink3);margin-top:8px;}
+.test-banner{display:none;background:var(--amber-bg,rgba(255,184,0,.1));border:1px solid var(--amber);color:var(--amber);border-radius:8px;padding:8px 12px;font-size:.7rem;margin-bottom:10px;}
+.test-mode .test-banner{display:block;}
+.btn-test{margin-top:10px;background:transparent;border:1px dashed var(--border2);color:var(--ink2);border-radius:8px;padding:9px 16px;font-family:'Space Grotesk',sans-serif;font-size:.72rem;cursor:pointer;}
+.btn-test:hover{border-color:var(--amber);color:var(--amber);}
+.pdf-paste{width:100%;min-height:70px;background:var(--surface2);border:1px solid var(--border2);border-radius:8px;padding:8px;font-family:'JetBrains Mono',monospace;font-size:.7rem;color:var(--ink);resize:vertical;box-sizing:border-box;margin-bottom:10px;}
+.pdf-filter{display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap;}
+.pdf-filter button{background:var(--surface2);border:1px solid var(--border2);border-radius:100px;padding:3px 11px;font-size:.66rem;color:var(--ink2);cursor:pointer;font-family:inherit;}
+.pdf-filter button.active{border-color:var(--green);color:var(--green);background:var(--green-bg);}
 </style>
 </head>
 <body>
@@ -381,11 +443,12 @@ tr:hover td{background:var(--surface2);}
       Iniciar sesión con Google
     </button>
     <div class="auth-note">Solo se solicitan permisos de Google Drive</div>
+    <button class="btn-test" onclick="enterTestMode()">Entrar en modo prueba (solo Proceso 4, sin Google)</button>
     <div id="auth-error" style="display:none;margin-top:14px;background:rgba(255,77,109,0.1);border:1px solid rgba(255,77,109,0.2);border-radius:6px;padding:10px 14px;font-size:.7rem;color:var(--red);font-family:'JetBrains Mono',monospace;line-height:1.6;">
       ⚠ No se encontró config.js.<br>Verifica las credenciales de Google.
     </div>
   </div>
-  <div class="auth-footer-tag">Pixel Graphic SAS · Drive Copiador v7</div>
+  <div class="auth-footer-tag">Pixel Graphic SAS · Drive Copiador v18</div>
 </div>
 
 <!-- SETTINGS -->
@@ -472,6 +535,11 @@ tr:hover td{background:var(--surface2);}
         Configuración
       </button>
     </div>
+  </div>
+
+  <div class="tabs" id="main-tabs">
+    <button class="tab active" id="tab-search" onclick="switchTab('search')"><span class="tab-t">Buscador de archivos</span><span class="tab-s">Pasos 1 a 3: indexar, buscar y copiar</span></button>
+    <button class="tab" id="tab-pdf" onclick="switchTab('pdf')"><span class="tab-t">Revisión contra PDFs</span><span class="tab-s">Verifica que los códigos del PDF estén en la carpeta</span></button>
   </div>
 
   <!-- Módulos -->
@@ -733,6 +801,114 @@ tr:hover td{background:var(--surface2);}
       </div>
     </div>
 
+    <!-- PROCESO 4: REVISIÓN CONTRA PDFs -->
+    <div class="process-panel" id="panel-pdf">
+      <div class="panel-head">
+        <div class="panel-head-left">
+          <div class="panel-num"><svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><polyline points="9 15 11 17 15 13"/></svg></div>
+          <div class="panel-info">
+            <div class="panel-title">Revisión contra PDFs</div>
+            <div class="panel-subtitle" id="pdf-sub">Lee los códigos de cada página del PDF y verifica que estén en la carpeta</div>
+          </div>
+        </div>
+        <div class="panel-head-right">
+          <span class="status-badge waiting" id="pdf-badge">En espera</span>
+        </div>
+      </div>
+      <div class="panel-body" id="body-pdf">
+        <div class="test-banner">MODO PRUEBA: sin conexión a Google Drive. Puedes comparar contra una carpeta de tu computador o contra una lista de códigos.</div>
+        <div class="timing-row" id="pdf-timing" style="display:none"><div class="timing-tag">Inicio: <span id="pdf-t-start">—</span></div><div class="timing-tag">Fin: <span id="pdf-t-end">—</span></div><div class="timing-tag duration" id="pdf-t-dur" style="display:none">Duración: <span id="pdf-t-dur-val">—</span></div></div>
+        <div class="stp" id="stp-src">
+          <div class="stp-h"><span class="stp-n" id="stp1-n">1</span><div><div class="stp-t">Elige contra qué comparar</div><div class="stp-s">Los códigos que se lean del PDF se buscarán en esta fuente</div></div></div>
+          <select id="pdf-src" onchange="onPdfSrcChange()" style="display:none">
+            <option value="dest">dest</option><option value="folder">folder</option><option value="drive">drive</option><option value="list">list</option>
+          </select>
+          <div class="src-cards" id="src-cards">
+            <div class="src-card" data-src="dest" tabindex="0" onclick="pickPdfSrc('dest')">
+              <span class="src-radio"></span>
+              <span class="src-body"><span class="src-t">Carpeta destino del catálogo</span><span class="src-d">La carpeta a la que copió el Buscador (paso 3) del catálogo que tengas seleccionado.</span><span class="src-i" id="src-info-dest"></span></span>
+            </div>
+            <div class="src-card" data-src="drive" tabindex="0" onclick="pickPdfSrc('drive')">
+              <span class="src-radio"></span>
+              <span class="src-body"><span class="src-t">Carpeta de Google Drive</span><span class="src-d">Cualquier carpeta de Drive: pega su enlace o su ID. Incluye sus subcarpetas.</span><span class="src-i" id="src-info-drive"></span>
+                <div class="src-extra" id="pdf-drive-wrap" onclick="event.stopPropagation()"><input type="text" id="pdf-drive-id" placeholder="https://drive.google.com/drive/folders/..." oninput="pdfFolderRef=null;checkPdfReady()"></div>
+              </span>
+            </div>
+            <div class="src-card" data-src="folder" tabindex="0" onclick="pickPdfSrc('folder')">
+              <span class="src-radio"></span>
+              <span class="src-body"><span class="src-t">Carpeta de mi computador</span><span class="src-d">Elige una carpeta de tu equipo (Chrome o Edge). Incluye sus subcarpetas. Haz clic de nuevo para cambiarla.</span><span class="src-i" id="src-info-folder"></span></span>
+            </div>
+            <div class="src-card" data-src="list" tabindex="0" onclick="pickPdfSrc('list')">
+              <span class="src-radio"></span>
+              <span class="src-body"><span class="src-t">Lista de códigos</span><span class="src-d">Pega los códigos que ya tienes copiados. También suma los resultados de los pasos 2 y 3 si los corriste.</span><span class="src-i" id="src-info-list"></span>
+                <div class="src-extra" id="pdf-paste-wrap" onclick="event.stopPropagation()"><textarea class="pdf-paste" id="pdf-paste" placeholder="34704&#10;34705_2&#10;51200" oninput="checkPdfReady();recomputePdfStatus()"></textarea></div>
+              </span>
+            </div>
+          </div>
+        </div>
+        <details class="adv">
+          <summary>Ajustes de lectura del PDF (avanzado)</summary>
+          <div class="pdf-opt">
+            <span>Formato del código (regex):</span>
+            <input type="text" id="pdf-regex" value="\d{4,8}">
+            <span style="color:var(--ink3)">Por defecto: 4 a 8 dígitos. Ajústalo si tus códigos son distintos.</span>
+          </div>
+          <div class="pdf-opt">
+            <label style="display:flex;gap:6px;align-items:center;cursor:pointer"><input type="checkbox" id="pdf-kw" checked> Solo tomar números que vengan después de la palabra <b>Código</b>, <b>Códigos</b>, <b>Cód</b> o <b>Cod</b>, con o sin tilde y en mayúsculas o minúsculas (ignora precios, registros sanitarios, años, etc.)</label>
+          </div>
+        </details>
+        <div class="stp" id="stp-pdf">
+          <div class="stp-h"><span class="stp-n" id="stp2-n">2</span><div><div class="stp-t">Sube el o los PDFs</div><div class="stp-s">Si subes varios, la numeración del catálogo continúa de uno al siguiente</div></div></div>
+          <div class="pdf-drop" id="pdf-drop" onclick="document.getElementById('pdf-input').click()">
+            <div class="pdf-drop-t">Arrastra uno o varios PDF aquí o haz clic para elegirlos</div>
+            <div class="pdf-drop-s">Los códigos se leen en tu navegador; los archivos no se suben a ningún servidor</div>
+          </div>
+          <input type="file" id="pdf-input" accept="application/pdf,.pdf" multiple style="display:none" onchange="onPdfFiles(this.files)">
+          <div class="pdf-files" id="pdf-files"></div>
+        </div>
+        <div class="stp" id="stp-run">
+          <div class="stp-h"><span class="stp-n" id="stp3-n">3</span><div><div class="stp-t">Verifica</div><div class="stp-s">Se activa cuando eliges la fuente y subes al menos un PDF</div></div></div>
+          <button class="btn-verify" id="btn-pdf" onclick="runPdf()" disabled>Verificar</button>
+          <div class="verify-hint" id="pdf-verify-hint"></div>
+        </div>
+        <div class="pdf-warn" id="pdf-warn"></div>
+        <div class="current-file" id="pdf-current" style="display:none"><div class="spinner green"></div><span id="pdf-current-txt">Leyendo PDF...</span></div>
+        <div class="prog-row" id="pdf-prog-row" style="display:none">
+          <div class="prog-pct" id="pdf-pct">0%</div>
+          <div class="prog-right">
+            <div class="prog-phase" id="pdf-phase">Leyendo páginas...</div>
+            <div class="prog-track"><div class="prog-fill green" id="pdf-fill" style="width:0%"></div></div>
+          </div>
+        </div>
+        <div class="mini-stats" id="pdf-mini-stats" style="display:none">
+          <div class="mini-stat"><div class="mini-stat-val c-ink" id="pdf-s-total">0</div><div class="mini-stat-lbl">Códigos en PDF</div></div>
+          <div class="mini-stat"><div class="mini-stat-val c-green" id="pdf-s-ok">0</div><div class="mini-stat-lbl">Copiados</div></div>
+          <div class="mini-stat"><div class="mini-stat-val c-red" id="pdf-s-no">0</div><div class="mini-stat-lbl">No copiados</div></div>
+        </div>
+        <div class="proc-controls" id="pdf-controls">
+          <button class="btn-ctrl pause" id="btn-pdf-pause" onclick="togglePause('pdf')"><span id="btn-pdf-pause-lbl">Pausar</span></button>
+          <button class="btn-ctrl cancel" onclick="cancelProcess('pdf')">Cancelar</button>
+        </div>
+        <div class="log-mini" id="pdf-log-wrap" style="display:none">
+          <div class="log-mini-top"><span class="log-mini-lbl">● Log PDF</span><span class="log-mini-lbl" id="pdf-log-count">0</span></div>
+          <div class="log-mini-body" id="pdf-log"></div>
+        </div>
+        <div class="pdf-res" id="pdf-res">
+          <div class="pdf-filter" id="pdf-filter">
+            <button class="active" onclick="pdfFilter('all',this)">Todos</button>
+            <button onclick="pdfFilter('ok',this)">Copiados</button>
+            <button onclick="pdfFilter('no',this)">No copiados</button>
+            <button id="btn-pdf-reread" onclick="recompareFolder()" style="display:none">Releer carpeta y comparar de nuevo</button>
+          </div>
+          <div class="table-scroll"><table><thead><tr><th>PDF</th><th>Pág. catálogo</th><th>Pág. PDF</th><th>Código</th><th>Estado</th><th>Archivo(s)</th></tr></thead><tbody id="tb-pdf"></tbody></table></div>
+        </div>
+        <div class="dl-row" id="pdf-dl-row">
+          <button class="btn-dl" onclick="exportPdfXLSX()">Excel Verificación PDF</button>
+          <button class="btn-dl" onclick="exportPdfCSV()">CSV Verificación PDF</button>
+        </div>
+      </div>
+    </div>
+
   </div><!-- /panels-wrap -->
 
   <!-- REPORT FINAL -->
@@ -781,6 +957,7 @@ tr:hover td{background:var(--surface2);}
 </div><!-- /shell -->
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script src="https://apis.google.com/js/api.js"></script>
 <script src="https://accounts.google.com/gsi/client"></script>
 <script>
@@ -802,7 +979,7 @@ let copyResults={ok:[],errors:[]};
 let newModLogoB64=null;
 let idxLogCount=0,srchLogCount=0,copyLogCount=0;
 // Process control flags
-let procFlags={idx:{paused:false,cancelled:false},srch:{paused:false,cancelled:false},copy:{paused:false,cancelled:false}};
+let procFlags={idx:{paused:false,cancelled:false},srch:{paused:false,cancelled:false},copy:{paused:false,cancelled:false},pdf:{paused:false,cancelled:false}};
 // Dest mode
 let destMode='drive'; // 'drive' | 'local'
 let localFolderHandle=null;
@@ -1183,6 +1360,7 @@ async function runSearch(){
   showSearchResults();
   document.getElementById('srch-dl-row').classList.add('visible');
 
+  checkPdfReady();
   if(searchResults.found.length>0){
     setPanelState('copy','active');
     openPanelBody('copy');
@@ -1343,6 +1521,7 @@ async function runCopy(){
   hideControls('copy');
   document.getElementById('copy-dl-row').classList.add('visible');
   buildReport();
+  checkPdfReady();
 }
 
 // Countdown helper: counts down secs, calls cb(remaining) each second
@@ -1757,13 +1936,14 @@ function exportFallbackCSV(){
 function resetAll(){
   selectedMod=null;searchResults={found:[],missing:[]};copyResults={ok:[],errors:[]};
   document.querySelectorAll('.module-btn').forEach(b=>b.classList.remove('selected'));
-  ['index','search','copy'].forEach(n=>{setPanelState(n,'waiting');closePanelBody(n);});
+  ['index','search','copy','pdf'].forEach(n=>{setPanelState(n,'waiting');closePanelBody(n);});
   document.getElementById('btn-index').disabled=true;
   document.getElementById('btn-search').disabled=true;
   document.getElementById('btn-copy').disabled=true;
   document.getElementById('report-wrap').style.display='none';
   resetSearchPanel();resetCopyPanel();
-  ['idx','srch','copy'].forEach(p=>{resetProcFlags(p);hideControls(p);});
+  ['idx','srch','copy','pdf'].forEach(p=>{resetProcFlags(p);hideControls(p);});
+  resetPdfPanel();
   document.getElementById('srch-dl-row').classList.remove('visible');
   document.getElementById('copy-dl-row').classList.remove('visible');
   document.getElementById('otros-setup').classList.remove('visible');
@@ -1773,6 +1953,487 @@ function resetAll(){
   renderModules();
 }
 
+
+// ── PROCESO 4: VERIFICAR PDFs ────────────────────────────────────────────────
+var testMode=false;
+let pdfFiles=[];
+let pdfRows=[]; // {pdf,page,code,status,files}
+let pdfLogCount=0;
+let pdfWorkerReady=false;
+function pdfLog(type,msg){
+  pdfLogCount++;
+  const box=document.getElementById('pdf-log');
+  const d=document.createElement('div');d.className='log-'+type;
+  d.textContent='['+ts()+'] '+msg;box.appendChild(d);box.scrollTop=box.scrollHeight;
+  document.getElementById('pdf-log-count').textContent=pdfLogCount;
+}
+function pdfPastedCodes(){var el=document.getElementById('pdf-paste');if(!el)return [];return el.value.split(/[\n,;\s]+/).map(function(x){return x.trim();}).filter(Boolean);}
+function pdfHasReference(){if(pdfSrcMode()!=='list')return !!pdfFolderRef;return pdfPastedCodes().length>0||copyResults.ok.length>0||searchResults.found.length>0||searchResults.missing.length>0;}
+function checkPdfReady(){
+  const btn=document.getElementById('btn-pdf');
+  if(!btn)return;
+  updatePdfSrcInfo();
+  const srcOk=pdfSourceReady();
+  const ready=pdfFiles.length>0&&srcOk;
+  btn.disabled=!ready;
+  var s1=document.getElementById('stp1-n'),s2=document.getElementById('stp2-n'),s3=document.getElementById('stp3-n'),hint=document.getElementById('pdf-verify-hint');
+  if(s1)s1.classList.toggle('done',srcOk);
+  if(s2)s2.classList.toggle('done',pdfFiles.length>0);
+  if(s3)s3.classList.toggle('done',!!(document.getElementById('panel-pdf').className.indexOf('done')>=0));
+  if(hint)hint.textContent=ready?'Todo listo. Haz clic en Verificar.':(!srcOk?pdfSourceReason():'Sube al menos un PDF para activar el botón.');
+  const st=document.getElementById('panel-pdf').className;
+  if(st.indexOf('running')<0&&st.indexOf('done')<0){
+    if(ready||pdfHasReference()||testMode){setPanelState('pdf',ready?'active':'waiting');openPanelBody('pdf');}
+  }
+  if(!pdfHasReference()){
+    const w=document.getElementById('pdf-warn');
+    w.style.display='none';
+  }
+}
+function resetPdfPanel(){
+  pdfFiles=[];pdfRows=[];pdfLogCount=0;
+  const ids=['pdf-current','pdf-prog-row','pdf-mini-stats','pdf-log-wrap','pdf-timing','pdf-res','pdf-warn'];
+  ids.forEach(i=>{const e=document.getElementById(i);if(e)e.style.display='none';});
+  const dl=document.getElementById('pdf-dl-row');if(dl)dl.classList.remove('visible');
+  pdfFolderRef=null;pdfStarts=[];pdfCounts=[];const f=document.getElementById('pdf-files');if(f)f.innerHTML='';
+  const pa=document.getElementById('pdf-paste');if(pa)pa.value='';
+  const t=document.getElementById('tb-pdf');if(t)t.innerHTML='';
+  const l=document.getElementById('pdf-log');if(l)l.innerHTML='';
+  const b=document.getElementById('btn-pdf');if(b)b.disabled=true;
+}
+var pdfStarts=[];var pdfCounts=[];
+async function onPdfFiles(list){
+  pdfFiles=Array.from(list).filter(f=>/\.pdf$/i.test(f.name)||f.type==='application/pdf');
+  pdfFiles.sort(function(a,b){return a.name.localeCompare(b.name,'es',{numeric:true,sensitivity:'base'});});
+  pdfStarts=[];pdfCounts=[];
+  renderPdfFileList();
+  checkPdfReady();
+  try{
+    await initPdfWorker();
+    for(var i=0;i<pdfFiles.length;i++){
+      var buf=await pdfFiles[i].arrayBuffer();
+      var doc=await pdfjsLib.getDocument({data:buf}).promise;
+      pdfCounts[i]=doc.numPages;await doc.destroy();
+    }
+    recalcPdfStarts(0,1);
+  }catch(e){pdfLog('err','No se pudo contar páginas: '+(e&&e.message?e.message:e));}
+  renderPdfFileList();
+}
+function recalcPdfStarts(from,startVal){
+  var cur=startVal;
+  for(var i=from;i<pdfFiles.length;i++){
+    pdfStarts[i]=cur;
+    if(pdfCounts[i]==null)break;
+    cur+=pdfCounts[i];
+  }
+}
+function onPdfStartEdit(i,v){
+  var n=parseInt(v,10);if(!(n>=1))n=1;
+  recalcPdfStarts(i,n);renderPdfFileList();
+}
+function renderPdfFileList(){
+  var box=document.getElementById('pdf-files');
+  if(!pdfFiles.length){box.innerHTML='';return;}
+  var h='<div style="font-family:Space Grotesk,sans-serif;font-size:.66rem;color:var(--ink3);margin-bottom:4px">Los PDFs se leen en orden de nombre y la numeración continúa entre ellos (página del catálogo). Puedes corregir la página inicial de cada archivo.</div>';
+  h+=pdfFiles.map(function(f,i){
+    var cnt=pdfCounts[i]!=null?pdfCounts[i]+' pág.':'contando...';
+    var end=(pdfStarts[i]!=null&&pdfCounts[i]!=null)?(pdfStarts[i]+pdfCounts[i]-1):'';
+    return '<div style="display:flex;gap:8px;align-items:center;margin-bottom:3px;flex-wrap:wrap"><span style="flex:1;min-width:180px">'+esc(f.name)+' ('+Math.round(f.size/1024)+' KB, '+cnt+')</span><span>Pág. inicial catálogo:</span><input type="number" min="1" value="'+(pdfStarts[i]!=null?pdfStarts[i]:'')+'" style="width:70px;background:var(--surface2);border:1px solid var(--border2);border-radius:6px;padding:3px 6px;color:var(--ink);font-family:inherit" onchange="onPdfStartEdit('+i+',this.value)"><span>'+(end!==''?'hasta '+end:'')+'</span></div>';
+  }).join('');
+  box.innerHTML=h;
+}
+(function(){
+  document.addEventListener('DOMContentLoaded',function(){
+    const dz=document.getElementById('pdf-drop');if(!dz)return;
+    ['dragenter','dragover'].forEach(ev=>dz.addEventListener(ev,function(e){e.preventDefault();dz.classList.add('over');}));
+    ['dragleave','drop'].forEach(ev=>dz.addEventListener(ev,function(e){e.preventDefault();dz.classList.remove('over');}));
+    dz.addEventListener('drop',function(e){onPdfFiles(e.dataTransfer.files);});
+  });
+})();
+async function initPdfWorker(){
+  if(pdfWorkerReady)return;
+  if(typeof pdfjsLib==='undefined')throw new Error('Librería pdf.js no disponible (revisa conexión a internet)');
+  const url='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+  try{
+    const r=await fetch(url);const t=await r.text();
+    pdfjsLib.GlobalWorkerOptions.workerSrc=URL.createObjectURL(new Blob([t],{type:'application/javascript'}));
+  }catch(e){
+    pdfjsLib.GlobalWorkerOptions.workerSrc=url;
+  }
+  pdfWorkerReady=true;
+}
+// Mapa de referencia: código base (minúscula) -> {copied:[nombres], foundNotCopied:[nombres], missing:bool}
+function buildPdfReference(){
+  if(pdfSrcMode()!=='list')return pdfFolderRef||{};
+  const ref={};
+  function get(k){k=String(k).toLowerCase();return ref[k]||(ref[k]={copied:[],foundNotCopied:[],missing:false});}
+  const okIds=new Set(copyResults.ok.map(r=>r.variant));
+  copyResults.ok.forEach(r=>{get(r.baseCode||extractBase(r.variant)).copied.push(r.name||r.variant);});
+  searchResults.found.forEach(r=>{if(!okIds.has(r.variant))get(r.baseCode||extractBase(r.variant)).foundNotCopied.push(r.name||r.variant);});
+  searchResults.missing.forEach(r=>{const e=get(r.baseCode||extractBase(r.variant));e.missing=true;});
+  pdfPastedCodes().forEach(c=>{get(extractBase(c)).copied.push(c+' (lista pegada)');});
+  return ref;
+}
+
+// ── REFERENCIA DESDE CARPETA REAL ────────────────────────────────────────────
+var pdfPickedHandle=null,pdfFolderRef=null,pdfRefLabel='';
+function pdfSrcMode(){var e=document.getElementById('pdf-src');return e?e.value:'list';}
+function stripExt(n){return String(n).replace(/\.[^.]+$/,'');}
+function addRefFile(ref,name,size){
+  var base=extractBase(stripExt(name)).toLowerCase();
+  var e=ref[base]||(ref[base]={copied:[],foundNotCopied:[],missing:false,emptyFiles:[]});
+  if(size===0||size==='0')e.emptyFiles.push(name);else e.copied.push(name);
+}
+function parseDriveId(v){v=(v||'').trim();var m=v.match(/\/folders\/([A-Za-z0-9_-]+)/)||v.match(/[?&]id=([A-Za-z0-9_-]+)/);return m?m[1]:(/^[A-Za-z0-9_-]{10,}$/.test(v)?v:'');}
+function applyPdfSrcOptions(){
+  var sel=document.getElementById('pdf-src');if(!sel)return;
+  var only=false;
+  var noCat=testMode||typeof selectedMod==='undefined'||!selectedMod;
+  var noDrive=testMode||!isAuthed;
+  Array.prototype.forEach.call(sel.options,function(o){
+    if(o.value==='dest')o.disabled=noCat;
+    if(o.value==='drive')o.disabled=noDrive;
+  });
+  var cur=sel.options[sel.selectedIndex];
+  if(cur&&cur.disabled){sel.value=(only||testMode||noCat)?'folder':'list';pdfFolderRef=null;}
+}
+var pdfSrcTouched=false;
+function switchTab(t){
+  var pdf=(t==='pdf');
+  document.body.classList.toggle('view-pdf',pdf);
+  document.getElementById('tab-search').classList.toggle('active',!pdf);
+  document.getElementById('tab-pdf').classList.toggle('active',pdf);
+  if(pdf){
+    var sel=document.getElementById('pdf-src');
+    applyPdfSrcOptions();
+    if(sel&&!pdfSrcTouched){
+      sel.value=(typeof selectedMod!=='undefined'&&selectedMod&&!testMode)?'dest':(isAuthed&&!testMode?'drive':'folder');
+    }
+    applyPdfSrcOptions();updatePdfSrcInfo();
+    openPanelBody('pdf');
+    var st=document.getElementById('panel-pdf').className;
+    if(st.indexOf('running')<0&&st.indexOf('done')<0)setPanelState('pdf','waiting');
+    checkPdfReady();
+  }
+  window.scrollTo(0,0);
+}
+function pickPdfSrc(v){
+  var sel=document.getElementById('pdf-src');if(!sel)return;
+  var opt=Array.prototype.find.call(sel.options,function(o){return o.value===v;});
+  if(!opt||opt.disabled)return;
+  pdfSrcTouched=true;
+  sel.value=v;
+  onPdfSrcChange();
+}
+function pdfSourceReady(){
+  var m=pdfSrcMode();
+  if(m==='dest')return typeof selectedMod!=='undefined'&&!!selectedMod&&!testMode;
+  if(m==='drive')return isAuthed&&!!parseDriveId(document.getElementById('pdf-drive-id').value);
+  return true;
+}
+function pdfSourceReason(){
+  var m=pdfSrcMode();
+  if(m==='dest'&&!pdfSourceReady())return 'Selecciona un catálogo en la pestaña Buscador, o elige otra fuente.';
+  if(m==='drive'){if(!isAuthed)return 'Para leer Drive debes iniciar sesión con Google.';if(!parseDriveId(document.getElementById('pdf-drive-id').value))return 'Pega el enlace o el ID de la carpeta de Drive.';}
+  return '';
+}
+function updatePdfSrcInfo(){
+  applyPdfSrcOptions();
+  var m=pdfSrcMode();
+  var dw=document.getElementById('pdf-drive-wrap');if(dw)dw.style.display=m==='drive'?'block':'none';
+  var w=document.getElementById('pdf-paste-wrap');if(w)w.style.display=m==='list'?'block':'none';
+  var rb=document.getElementById('btn-pdf-reread');if(rb)rb.style.display=m==='list'?'none':'inline-block';
+  var sel=document.getElementById('pdf-src');
+  Array.prototype.forEach.call(document.querySelectorAll('#src-cards .src-card'),function(c){
+    var v=c.getAttribute('data-src');
+    c.classList.toggle('selected',v===m);
+    var o=Array.prototype.find.call(sel.options,function(x){return x.value===v;});
+    c.classList.toggle('disabled',!!(o&&o.disabled));
+  });
+  function put(id,t){var e=document.getElementById(id);if(e)e.textContent=t;}
+  var hasCat=typeof selectedMod!=='undefined'&&selectedMod&&!testMode;
+  if(hasCat){
+    put('src-info-dest','Catálogo: '+selectedMod.name+' - '+((destMode==='local'||selectedMod.isLocal)?('carpeta local '+((localFolderHandle||otrosDestHandle)?(localFolderHandle||otrosDestHandle).name:'(se pedirá al verificar)')):('Drive '+truncId(selectedMod.dest))));
+  }else put('src-info-dest','Primero selecciona un catálogo en la pestaña Buscador');
+  put('src-info-drive',(isAuthed&&!testMode)?'':'Requiere iniciar sesión con Google');
+  put('src-info-folder',pdfPickedHandle?'Elegida: '+pdfPickedHandle.name:'Se te pedirá elegirla');
+  put('src-info-list','');
+}
+async function onPdfSrcChange(){
+  pdfFolderRef=null;
+  updatePdfSrcInfo();
+  if(pdfSrcMode()==='folder'){
+    try{
+      if(!window.showDirectoryPicker){showToast('Este navegador no permite elegir carpetas (usa Chrome o Edge)');return;}
+      pdfPickedHandle=await window.showDirectoryPicker({mode:'read'});
+      updatePdfSrcInfo();
+    }catch(e){}
+  }
+  checkPdfReady();
+}
+async function walkLocalRef(h,ref,cnt,depth){
+  for await(const pair of h.entries()){
+    const name=pair[0],entry=pair[1];
+    if(entry.kind==='file'){
+      const f=await entry.getFile();addRefFile(ref,name,f.size);cnt.n++;
+      if(cnt.n%500===0){pdfLog('info','Leyendo carpeta... '+cnt.n+' archivos');await sleep(0);}
+    }else if(entry.kind==='directory'&&depth<8){await walkLocalRef(entry,ref,cnt,depth+1);}
+  }
+}
+async function walkDriveRef(rootId,ref,cnt){
+  const queue=[rootId];
+  while(queue.length){
+    const id=queue.shift();let token=null;
+    do{
+      const resp=await gapi.client.drive.files.list({q:"'"+id+"' in parents and trashed=false",fields:'nextPageToken, files(id,name,mimeType,size)',pageSize:1000,pageToken:token||undefined,supportsAllDrives:true,includeItemsFromAllDrives:true});
+      (resp.result.files||[]).forEach(function(f){
+        if(f.mimeType==='application/vnd.google-apps.folder'){queue.push(f.id);return;}
+        addRefFile(ref,f.name,f.size===undefined?undefined:Number(f.size));cnt.n++;
+      });
+      token=resp.result.nextPageToken;
+      if(cnt.n&&cnt.n%1000<1000&&token)pdfLog('info','Leyendo carpeta... '+cnt.n+' archivos');
+    }while(token);
+  }
+}
+async function loadPdfFolderRef(){
+  var m=pdfSrcMode(),ref={},cnt={n:0},label='';
+  if(m==='folder'){
+    if(!pdfPickedHandle)throw new Error('No se eligió ninguna carpeta');
+    await walkLocalRef(pdfPickedHandle,ref,cnt,0);label='Carpeta local "'+pdfPickedHandle.name+'"';
+  }else if(m==='drive'){
+    var did=parseDriveId(document.getElementById('pdf-drive-id').value);
+    if(!did)throw new Error('Escribe el enlace o ID de la carpeta de Drive');
+    if(!isAuthed||typeof gapi==='undefined'||!gapi.client||!gapi.client.drive)throw new Error('Necesitas iniciar sesión con Google para leer Drive');
+    await walkDriveRef(did,ref,cnt);label='Carpeta de Drive ('+did+')';
+  }else{
+    if(typeof selectedMod==='undefined'||!selectedMod)throw new Error('No hay catálogo seleccionado');
+    if(destMode==='local'||selectedMod.isLocal){
+      var h=localFolderHandle||otrosDestHandle;
+      if(!h)throw new Error('No hay carpeta de destino local seleccionada');
+      await walkLocalRef(h,ref,cnt,0);label='Carpeta destino local "'+h.name+'"';
+    }else{
+      if(!selectedMod.dest)throw new Error('El catálogo no tiene carpeta de destino');
+      await walkDriveRef(selectedMod.dest,ref,cnt);label='Carpeta destino en Drive ('+selectedMod.dest+')';
+    }
+  }
+  pdfFolderRef=ref;
+  pdfRefLabel=label+' - '+cnt.n+' archivo(s) leídos el '+new Date().toLocaleString('es');
+  pdfLog('ok','Carpeta leída: '+cnt.n+' archivo(s), '+Object.keys(ref).length+' código(s) base distintos.');
+  return ref;
+}
+async function recompareFolder(){
+  if(pdfSrcMode()==='list'||!pdfRows.length)return;
+  try{
+    pdfLog('info','Releyendo carpeta de comparación...');
+    await loadPdfFolderRef();
+    recomputePdfStatus();
+    showToast('Comparación actualizada');
+  }catch(e){pdfLog('err','No se pudo leer la carpeta: '+(e&&e.message?e.message:e));showToast('No se pudo leer la carpeta');}
+}
+
+function pdfStatusOf(entry){
+  if(pdfSrcMode()!=='list'){
+    if(!pdfFolderRef)return {k:'na',t:'Sin comparar (carpeta no leída)',files:''};
+    if(!entry)return {k:'no',t:'No está en la carpeta',files:''};
+    if(!entry.copied.length&&entry.emptyFiles&&entry.emptyFiles.length)return {k:'err',t:'En la carpeta, pero el archivo está vacío (0 bytes)',files:entry.emptyFiles.join(' | ')};
+    return {k:'ok',t:'Copiado (está en la carpeta)',files:entry.copied.join(' | ')};
+  }
+  if(!pdfHasReference())return {k:'na',t:'Sin comparar (no hay lista de referencia)',files:''};
+  if(!entry)return {k:'no',t:'No copiado (no está en la búsqueda/copia)',files:''};
+  if(entry.copied.length)return {k:'ok',t:'Copiado',files:entry.copied.join(' | ')};
+  if(entry.foundNotCopied.length){const ran=(copyResults.ok.length+copyResults.errors.length)>0;return {k:'err',t:ran?'Encontrado, pero no copiado (error de copia)':'Encontrado, pendiente de copiar (paso 3 no ejecutado)',files:entry.foundNotCopied.join(' | ')};}
+  return {k:'no',t:'No copiado (no encontrado en origen)',files:''};
+}
+async function runPdf(){
+  if(!pdfFiles.length)return;
+  try{
+    var sm=pdfSrcMode();
+    if(sm==='folder'&&!pdfPickedHandle){pdfPickedHandle=await window.showDirectoryPicker({mode:'read'});updatePdfSrcInfo();}
+    if(sm==='dest'&&typeof selectedMod!=='undefined'&&selectedMod&&(destMode==='local'||selectedMod.isLocal)&&!(localFolderHandle||otrosDestHandle)){
+      localFolderHandle=await window.showDirectoryPicker({mode:'read'});updatePdfSrcInfo();
+    }
+  }catch(e){showToast('No se eligió carpeta');return;}
+  let rx,kwRx=null;
+  const pat=document.getElementById('pdf-regex').value;
+  const kwOnly=document.getElementById('pdf-kw').checked;
+  try{
+    rx=new RegExp(pat,'g');
+    if(kwOnly){
+      const C='(?:'+pat+')(?![\\p{L}\\d])';
+      kwRx=new RegExp('(?<![\\p{L}])c[oó]d(?:igos?)?\\b\\.?\\s*:?\\s*('+C+'(?:(?:\\s*[,;/]\\s*|\\s+(?:y|o|e)\\s+)'+C+')*)','giu');
+    }
+  }
+  catch(e){showToast('Patrón regex inválido');return;}
+  resetProcFlags('pdf');
+  pdfRows=[];pdfLogCount=0;
+  document.getElementById('pdf-log').innerHTML='';
+  document.getElementById('tb-pdf').innerHTML='';
+  document.getElementById('pdf-res').style.display='none';
+  document.getElementById('pdf-dl-row').classList.remove('visible');
+  document.getElementById('btn-pdf').disabled=true;
+  ['pdf-current','pdf-prog-row','pdf-mini-stats','pdf-log-wrap','pdf-timing'].forEach(i=>{document.getElementById(i).style.display='';});
+  document.getElementById('pdf-current').style.display='flex';
+  document.getElementById('pdf-t-dur').style.display='none';
+  setPanelState('pdf','running');openPanelBody('pdf');showControls('pdf');
+  const t0=Date.now();
+  document.getElementById('pdf-t-start').textContent=fmtTime(t0);
+  document.getElementById('pdf-t-end').textContent='—';
+  pdfLog('info','Inicio de verificación: '+pdfFiles.length+' PDF(s). Formato: '+rx.source+(kwOnly?' (solo después de Código/Códigos/COD/Cod)':' (cualquier número que cumpla el formato)'));
+  if(pdfSrcMode()!=='list'){
+    document.getElementById('pdf-phase').textContent='Leyendo carpeta de comparación...';
+    try{await loadPdfFolderRef();}
+    catch(e){
+      pdfLog('err','No se pudo leer la carpeta: '+(e&&e.message?e.message:e));
+      setPanelState('pdf','error');hideControls('pdf');document.getElementById('pdf-current').style.display='none';
+      document.getElementById('btn-pdf').disabled=false;return;
+    }
+  }else{pdfRefLabel='Lista pegada / resultados de la sesión';}
+  const ref=buildPdfReference();
+  const known=Object.keys(ref);
+  const warn=document.getElementById('pdf-warn');warn.style.display='none';
+  let emptyPages=0,totalPages=0,donePages=0;
+  try{
+    await initPdfWorker();
+    // 1) contar páginas
+    const counts=[];
+    for(const f of pdfFiles){
+      const buf0=await f.arrayBuffer();
+      const doc0=await pdfjsLib.getDocument({data:buf0}).promise;
+      counts.push(doc0.numPages);totalPages+=doc0.numPages;
+      pdfLog('info',f.name+': '+doc0.numPages+' página(s)');
+      await doc0.destroy();
+    }
+    // 2) extraer y cruzar (un PDF a la vez para cuidar la memoria)
+    outer:
+    for(let fi=0;fi<pdfFiles.length;fi++){
+      const buf=await pdfFiles[fi].arrayBuffer();
+      const d={name:pdfFiles[fi].name,doc:await pdfjsLib.getDocument({data:buf}).promise};
+      for(let p=1;p<=d.doc.numPages;p++){
+        await waitIfPaused('pdf');
+        if(procFlags.pdf.cancelled)break outer;
+        const page=await d.doc.getPage(p);
+        const tc=await page.getTextContent();
+        const text=tc.items.map(it=>it.str).join(' ').normalize('NFC');
+        const found=new Set();
+        let m;
+        if(kwOnly){
+          kwRx.lastIndex=0;
+          while((m=kwRx.exec(text))!==null){
+            const cr=new RegExp(pat,'g');let c;
+            while((c=cr.exec(m[1]))!==null){if(c[0]===''){cr.lastIndex++;continue;}found.add(c[0]);}
+            if(m[0]==='')kwRx.lastIndex++;
+          }
+        }else{
+          rx.lastIndex=0;
+          while((m=rx.exec(text))!==null){found.add(m[0]);if(m[0]==='')rx.lastIndex++;}
+        }
+        // códigos conocidos que aparezcan literalmente en la página (solo si no se exige la palabra Código/COD)
+        const low=text.toLowerCase();
+        if(!kwOnly)known.forEach(k=>{if(k.length>=3&&low.indexOf(k)>=0){const re=new RegExp('(^|[^a-z0-9])'+k.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'($|[^a-z0-9])','i');if(re.test(text))found.add(k);}});
+        if(text.trim().length===0){emptyPages++;pdfLog('warn','Pág. catálogo '+((pdfStarts[fi]||1)+p-1)+' ('+d.name+' pág. '+p+'): sin texto (¿escaneada?)');}
+        const seen=new Set();
+        found.forEach(code=>{
+          const key=code.toLowerCase();if(seen.has(key))return;seen.add(key);
+          const st=pdfStatusOf(ref[key]);
+          pdfRows.push({pdf:d.name,page:(pdfStarts[fi]||1)+p-1,pdfPage:p,code:code,status:st.k,statusTxt:st.t,files:st.files});
+        });
+        donePages++;
+        const pct=Math.round(donePages/totalPages*100);
+        document.getElementById('pdf-pct').textContent=pct+'%';
+        document.getElementById('pdf-fill').style.width=pct+'%';
+        document.getElementById('pdf-phase').textContent='Página '+donePages+' de '+totalPages;
+        document.getElementById('pdf-current-txt').textContent=d.name+' - pág. '+p;
+        document.getElementById('pdf-s-total').textContent=pdfRows.length;
+        document.getElementById('pdf-s-ok').textContent=pdfRows.filter(r=>r.status==='ok').length;
+        document.getElementById('pdf-s-no').textContent=pdfRows.filter(r=>r.status==='no'||r.status==='err').length;
+        page.cleanup();
+        if(donePages%5===0)await sleep(0);
+      }
+      await d.doc.destroy();
+    }
+  }catch(e){
+    pdfLog('err','Error: '+(e&&e.message?e.message:e));
+    setPanelState('pdf','error');hideControls('pdf');
+    document.getElementById('btn-pdf').disabled=false;
+    return;
+  }
+  const t1=Date.now();
+  document.getElementById('pdf-t-end').textContent=fmtTime(t1);
+  document.getElementById('pdf-t-dur').style.display='inline-flex';
+  document.getElementById('pdf-t-dur-val').textContent=fmtDuration(t1-t0);
+  document.getElementById('pdf-current').style.display='none';
+  hideControls('pdf');
+  if(emptyPages>0){
+    warn.textContent='Atención: '+emptyPages+' página(s) sin texto extraíble (posible PDF escaneado). Este proceso no hace OCR, por lo que esas páginas no se evaluaron.';
+    warn.style.display='block';
+  }
+  const cancelled=procFlags.pdf.cancelled;
+  pdfLog(cancelled?'warn':'ok',(cancelled?'Cancelado. Parcial: ':'Extracción completa: ')+pdfRows.length+' códigos en '+donePages+' página(s).'+(pdfHasReference()?' Copiados: '+pdfRows.filter(r=>r.status==='ok').length:' Sin lista de referencia: pega códigos copiados para comparar.'));
+  pdfLog('ok','Duración: '+fmtDuration(t1-t0)+' ('+fmtTime(t0)+' > '+fmtTime(t1)+')');
+  setPanelState('pdf',cancelled?'error':'done');
+  checkPdfReady();
+  document.getElementById('btn-pdf').disabled=false;
+  renderPdfTable('all');
+  document.getElementById('pdf-res').style.display='block';
+  document.getElementById('pdf-dl-row').classList.add('visible');
+}
+function esc(t){return String(t).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+function renderPdfTable(filter){
+  const tb=document.getElementById('tb-pdf');
+  const rows=pdfRows.filter(r=>filter==='all'||(filter==='ok'?r.status==='ok':(r.status==='no'||r.status==='err')));
+  const cls={ok:'st-ok',no:'st-no',err:'st-err',na:'st-err'};
+  const MAX=2000;
+  tb.innerHTML=rows.slice(0,MAX).map(r=>'<tr><td>'+esc(r.pdf)+'</td><td>'+r.page+'</td><td>'+(r.pdfPage||'')+'</td><td style="font-family:\'JetBrains Mono\',monospace">'+esc(r.code)+'</td><td class="'+cls[r.status]+'">'+esc(r.statusTxt)+'</td><td>'+esc(r.files)+'</td></tr>').join('')
+    +(rows.length>MAX?'<tr><td colspan="6">Mostrando '+MAX+' de '+rows.length+'. El Excel/CSV contiene todo.</td></tr>':'');
+}
+function recomputePdfStatus(){
+  if(!pdfRows.length)return;
+  var ref=buildPdfReference();
+  pdfRows.forEach(function(r){var st=pdfStatusOf(ref[String(r.code).toLowerCase()]);r.status=st.k;r.statusTxt=st.t;r.files=st.files;});
+  var act=document.querySelector('#pdf-filter button.active');
+  var f=act&&act.textContent.indexOf('No')===0?'no':(act&&act.textContent==='Copiados'?'ok':'all');
+  renderPdfTable(f);
+  document.getElementById('pdf-s-ok').textContent=pdfRows.filter(function(r){return r.status==='ok';}).length;
+  document.getElementById('pdf-s-no').textContent=pdfRows.filter(function(r){return r.status==='no'||r.status==='err';}).length;
+}
+function pdfFilter(f,btn){
+  document.querySelectorAll('#pdf-filter button').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');renderPdfTable(f);
+}
+function exportPdfXLSX(){
+  if(!pdfRows.length){showToast('Sin resultados');return;}
+  if(typeof XLSX==='undefined'){exportPdfCSV();return;}
+  const date=new Date().toISOString().slice(0,10);
+  const mod=(selectedMod&&!testMode&&pdfSrcMode()==='dest')?selectedMod.name:'';
+  const head=['PDF','Página catálogo','Página en el PDF','Código','Estado','Archivo(s) copiado(s)'];
+  const all=[head].concat(pdfRows.map(r=>[r.pdf,r.page,r.pdfPage||'',r.code,r.statusTxt,r.files]));
+  const no=[head].concat(pdfRows.filter(r=>r.status==='no'||r.status==='err').map(r=>[r.pdf,r.page,r.pdfPage||'',r.code,r.statusTxt,r.files]));
+  const nOk=pdfRows.filter(r=>r.status==='ok').length;
+  const resumen=[['Verificación de PDFs'],['Catálogo',mod],['Fecha',date],['Comparado contra',pdfRefLabel||'Lista pegada / resultados de la sesión'],['PDFs',pdfFiles.length],['Códigos detectados (por página)',pdfRows.length],['Copiados',nOk],['No copiados',pdfRows.filter(r=>r.status==='no'||r.status==='err').length],['Sin comparar',pdfRows.filter(r=>r.status==='na').length],['% copiados',pdfRows.length?(nOk/pdfRows.length*100).toFixed(1)+'%':'0%'],['Nota','Códigos extraídos con regex editable; no incluye OCR para PDFs escaneados.']];
+  const wb=XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(resumen),'Resumen');
+  const ws1=XLSX.utils.aoa_to_sheet(all);ws1['!cols']=[{wch:34},{wch:15},{wch:15},{wch:16},{wch:44},{wch:50}];
+  XLSX.utils.book_append_sheet(wb,ws1,'Por página');
+  const ws2=XLSX.utils.aoa_to_sheet(no);ws2['!cols']=ws1['!cols'];
+  XLSX.utils.book_append_sheet(wb,ws2,'No copiados');
+  XLSX.writeFile(wb,'verificacion_pdf_'+mod.replace(/ /g,'_')+'_'+date+'.xlsx');
+}
+function exportPdfCSV(){
+  if(!pdfRows.length){showToast('Sin resultados');return;}
+  const q=function(v){return '"'+String(v).replace(/"/g,'""')+'"';};
+  let csv='PDF,PAGINA_CATALOGO,PAGINA_PDF,CODIGO,ESTADO,ARCHIVOS\n';
+  pdfRows.forEach(r=>{csv+=[q(r.pdf),r.page,r.pdfPage||'',q(r.code),q(r.statusTxt),q(r.files)].join(',')+'\n';});
+  dlFile('verificacion_pdf_'+new Date().toISOString().slice(0,10)+'.csv',csv);
+}
+
+function enterTestMode(){
+  testMode=true;
+  document.body.classList.add('test-mode');
+  document.getElementById('auth-overlay').style.display='none';
+  document.getElementById('main-app').style.display='block';
+  pdfSrcTouched=false;
+  switchTab('pdf');
+}
 // ── UTILS ─────────────────────────────────────────────────────────────────────
 function fmtTime(ts){return new Date(ts).toLocaleTimeString('es',{hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false});}
 function fmtDuration(ms){const s=Math.floor(ms/1000);const m=Math.floor(s/60);const sec=s%60;if(m===0)return`${sec}s`;return`${m}m ${sec}s`;}
@@ -1802,13 +2463,13 @@ function cancelProcess(proc){
   procFlags[proc].cancelled=true;
   procFlags[proc].paused=false;
   addProcLog(proc,'err',`✗ Proceso cancelado por el usuario`);
-  setPanelState(proc==='idx'?'index':proc==='srch'?'search':'copy','error');
+  setPanelState(proc==='idx'?'index':proc==='srch'?'search':proc==='pdf'?'pdf':'copy','error');
   document.getElementById(`${proc}-controls`).classList.remove('visible');
   if(proc==='srch'){
     // show partial results if any
     if(searchResults.found.length>0||searchResults.missing.length>0) showSearchResults();
   }
-  if(proc==='copy') buildReport();
+  if(proc==='copy'){ buildReport(); checkPdfReady(); }
 }
 // Helper: wait while paused or check cancel
 async function waitIfPaused(proc){
@@ -1822,6 +2483,7 @@ function hideControls(proc){document.getElementById(`${proc}-controls`).classLis
 function addProcLog(proc,type,msg){
   if(proc==='idx')idxLog(type,msg);
   else if(proc==='srch')srchLog(type,msg);
+  else if(proc==='pdf')pdfLog(type,msg);
   else copyLog(type,msg);
 }
 
@@ -1900,12 +2562,18 @@ function dlFile(filename,content){
 }
 
 function doLogout(){
-  if(!confirm('¿Cerrar sesión?'))return;
+  if(!confirm(testMode?'¿Salir del modo prueba?':'¿Cerrar sesión?'))return;
   isAuthed=false;
-  // Revocar token de Google
-  const token=gapi.client.getToken();
-  if(token) google.accounts.oauth2.revoke(token.access_token,()=>{});
-  gapi.client.setToken(null);
+  if(testMode){testMode=false;document.body.classList.remove('test-mode');}
+  else{
+    // Revocar token de Google
+    try{
+      const token=gapi.client.getToken();
+      if(token) google.accounts.oauth2.revoke(token.access_token,()=>{});
+      gapi.client.setToken(null);
+    }catch(e){}
+  }
+  pdfSrcTouched=false;switchTab('search');
   // Resetear estado
   resetAll();
   selectedMod=null;
